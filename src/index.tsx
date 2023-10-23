@@ -4,6 +4,8 @@ import { AppView } from "./app/view/App/AppView";
 import { Config, IConfigOptions } from "./app/Config";
 import { ECS_Data } from "./app/model/ECS_Data";
 
+let root: ReactDOMClient.Root;
+
 (window as any).start = (config: IConfigOptions) => {
 	Config.instance = new Config(config);
 
@@ -11,9 +13,9 @@ import { ECS_Data } from "./app/model/ECS_Data";
 		return "Are you sure to close this tool?";
 	};
 
-	ECS_Data.current = new ECS_Data();
+	ECS_Data.current = ECS_Data.current ?? new ECS_Data();
 
 	const view = document.querySelector('.view');
-	const root = ReactDOMClient.createRoot(view);
+	root = root ?? ReactDOMClient.createRoot(view);
 	root.render(<AppView />);
 };

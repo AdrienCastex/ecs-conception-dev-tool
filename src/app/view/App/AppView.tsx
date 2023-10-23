@@ -5,6 +5,7 @@ import { ArchetypesColumnView } from "../ArchetypesColumn/ArchetypesColumnView";
 import { ECS_Data } from "../../model/ECS_Data";
 import { KeyboardManager } from "../../KeyboardManager";
 import { Config } from "../../Config";
+import { SystemsColumnView } from "../SystemsColumn/SystemsColumnView";
 
 export function AppView() {
     const [currentData, setCurrentData] = useState(ECS_Data.current);
@@ -13,6 +14,7 @@ export function AppView() {
     const [archetypesGroups, setArchetypesGroups] = useState(ECS_Data.current.archetypesGroups);
     const [componentsGroups, setComponentsGroups] = useState(ECS_Data.current.componentsGroups);
     const [lastGeneratedCode, setLastGeneratedCode] = useState(localStorage.getItem('last-generated-code') ?? '');
+    const [configJs, setConfigJs] = useState(localStorage.getItem('config-js') ?? '');
 
     useEffect(() => {
         ECS_Data.current = currentData;
@@ -76,6 +78,10 @@ export function AppView() {
     }, [lastGeneratedCode]);
 
     useEffect(() => {
+        localStorage.setItem('config-js', configJs);
+    }, [configJs]);
+
+    useEffect(() => {
         if(archs !== currentData.archetypes) {
             currentData.archetypes = archs;
         }
@@ -93,27 +99,39 @@ export function AppView() {
     return <div className="main-columns-wrapper">
         <ComponentsColumnView components={comps} groups={componentsGroups} onGroupsChanged={(newGroups) => setComponentsGroups(newGroups)} onComponentsChanged={(newComps) => setComps(newComps)} />
         <ArchetypesColumnView components={comps} componentsGroups={componentsGroups} archetypes={archs} onArchetypesChanged={setArchs} />
+        <SystemsColumnView />
         <div className="overlay-btns">
-            <div className="gbtn" onClick={() => {
-                setLastGeneratedCode(Config.instance.convertToCode(currentData));
-            }}>Generate {'>'}</div>
-            <textarea value={lastGeneratedCode} onChange={e => {
-                const newValue = e.target.value ?? '';
-                setLastGeneratedCode(newValue);
-            }}></textarea>
-            <div className="gbtn" onClick={() => {
-                let json: string = lastGeneratedCode;
+            <div className="line">
+                <div className="gbtn" onClick={() => {
+                    setLastGeneratedCode(Config.instance.convertToCode(currentData));
+                }}>Generate {'>'}</div>
+                <textarea value={lastGeneratedCode} onChange={e => {
+                    const newValue = e.target.value ?? '';
+                    setLastGeneratedCode(newValue);
+                }}></textarea>
+                <div className="gbtn" onClick={() => {
+                    let json: string = lastGeneratedCode;
 
-                const genStartIndex = json.indexOf(`{__gen_start__}`);
-                if(genStartIndex >= 0) {
-                    json = json.substring(genStartIndex + `{__gen_start__}`.length);
-                    json = json.substring(0, json.indexOf(`{__gen_end__}`));
-                }
+                    const genStartIndex = json.indexOf(`{__gen_start__}`);
+                    if(genStartIndex >= 0) {
+                        json = json.substring(genStartIndex + `{__gen_start__}`.length);
+                        json = json.substring(0, json.indexOf(`{__gen_end__}`));
+                    }
 
-                const data = JSON.parse(json);
+                    const data = JSON.parse(json);
 
-                setCurrentData(ECS_Data.fromData(data));
-            }}>{'>'} Load</div>
+                    setCurrentData(ECS_Data.fromData(data));
+                }}>{'>'} Load json</div>
+            </div>
+            <div className="line">
+                <textarea value={configJs} onChange={e => {
+                    const newValue = e.target.value ?? '';
+                    setConfigJs(newValue);
+                }}></textarea>
+                <div className="gbtn" onClick={() => {
+                    eval(configJs);
+                }}>{'>'} Load config</div>
+            </div>
         </div>
     </div>
 }

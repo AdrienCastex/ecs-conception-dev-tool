@@ -87,6 +87,12 @@ input {
         display: flex;
         flex-direction: column;
 
+        &:not(:first-child) {
+            .column-header {
+                border-left: 1px solid rgb(233, 233, 233);
+            }
+        }
+
         &:not(:last-child) {
             border-right: 1px solid $darkMainColor;
         }
@@ -146,9 +152,32 @@ input {
     top: 0px;
     right: 0px;
 
+    textarea,
+    .gbtn {
+        height: calc(1em + 1ch + 2px);
+    }
+
+    .gbtn {
+        padding: 0.5ch;
+        line-height: 1em;
+    }
+
     textarea {
-        height: calc(1em + 2ch);
-        vertical-align: middle;
+        vertical-align: top;
         padding: 1ch;
+        border: 0px;
+    }
+
+    .line {
+        text-align: right;
+        
+        > *:last-child {
+            min-width: 16ch;
+            text-align: left;
+        }
+
+        &:not(:first-child) {
+            border-top: 1px solid transparent;
+        }
     }
 }
