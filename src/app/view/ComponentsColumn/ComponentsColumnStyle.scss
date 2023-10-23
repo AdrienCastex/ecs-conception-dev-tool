@@ -1,0 +1,32 @@
+
+.components-column {
+    .component {
+        padding: 1ch;
+        border-bottom: 1ch solid rgb(66, 66, 66);
+
+        .props-wrapper:not(:empty) {
+            margin-top: 1ch;
+        }
+
+        .properties {
+            .property {
+                display: grid;
+                grid-template-columns: 1fr auto 10ch auto;
+
+                button {
+                    width: 100%;
+                }
+            }
+        }
+
+        > .name {
+            display: flex;
+        }
+
+        .plus-btn {
+            align-self: flex-end;
+            border: 1px solid rgb(66, 66, 66);
+            text-align: center;
+        }
+    }
+}

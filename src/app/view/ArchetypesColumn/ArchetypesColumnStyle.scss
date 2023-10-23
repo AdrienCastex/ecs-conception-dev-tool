@@ -1,0 +1,25 @@
+
+.archetypes-column {
+    .archetype {
+        padding: 1ch;
+        border-bottom: 1ch solid rgb(66, 66, 66);
+
+        .name-line {
+            display: flex;
+
+            .dropdown {
+                align-self: flex-end;
+            }
+        }
+
+        .comp-group-header {
+            background-color: #ff8989;
+            color: rgb(66, 66, 66);
+            text-align: center;
+        }
+
+        .components {
+            margin-top: 1ch;
+        }
+    }
+}

@@ -1,0 +1,154 @@
+
+html, body {
+    overflow: hidden;
+    margin: 0px;
+    padding: 0px;
+    font-size: 1rem;
+    min-height: 100vh;
+    font-family: monospace;
+
+    line-height: 1em;
+    cursor: default;
+    
+    overflow: hidden;
+    height: 100%;
+
+    background-color: rgb(233, 233, 233);
+}
+
+$darkMainColor: rgb(66, 66, 66);
+
+* {
+    box-sizing: border-box;
+    
+    scrollbar-color: $darkMainColor #ddd;
+    scrollbar-width: thin;
+}
+
+*:not(input):not(textarea) {
+    user-select: none;
+}
+
+input {
+    border-radius: 0px !important;
+    line-height: 1em !important;
+    padding: 1ch !important;
+    height: calc(1em + 2ch + 2px) !important;
+}
+
+.btn-simple {
+    cursor: pointer;
+    display: inline-block;
+}
+.gbtn-inv,
+.gbtn {
+    cursor: pointer;
+    display: inline-block;
+    padding: 1ch;
+    border-radius: 0px;
+    line-height: 1em;
+}
+.gbtn {
+    color: $darkMainColor;
+    background-color: white;
+    border: 1px solid white;
+
+    &:active,
+    &.show,
+    &:hover {
+        color: white !important;
+        background-color: $darkMainColor !important;
+    }
+}
+.gbtn-inv {
+    color: white;
+    background-color: $darkMainColor;
+    border: 1px solid $darkMainColor;
+
+    &:active,
+    &.show,
+    &:hover {
+        color: $darkMainColor !important;
+        background-color: white !important;
+    }
+}
+
+.view {
+    height: 100%;
+}
+
+.main-columns-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    height: 100%;
+
+    .main-column {
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+
+        &:not(:last-child) {
+            border-right: 1px solid $darkMainColor;
+        }
+
+        > .column-header {
+            background-color: $darkMainColor;
+            padding: 1ch;
+            flex: 0 1 auto;
+
+            .column-name {
+                display: inline-block;
+                color: white;
+                font-size: 1.25em;
+                padding: 1ch;
+            }
+        }
+
+        > .column-body {
+            overflow-y: scroll;
+            flex: 1 1 auto;
+            padding-bottom: 10em;
+
+            .group {
+                .group-header {
+                    padding: 1ch;
+                    text-align: center;
+                    border-bottom: 1px solid #fd3535;
+                    
+                    display: flex;
+
+                    &:not(.default-group) {
+                        padding: 0px;
+                    }
+
+                    &,
+                    input {
+                        color: $darkMainColor;
+                        background-color: #ff8989;
+                        font-size: 1.5rem;
+                        text-align: center;
+                        justify-content: center;
+
+                        border: 0px;
+                    }
+
+                    .plus-btn {
+                        align-self: flex-end;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.overlay-btns {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+
+    textarea {
+        height: calc(1em + 2ch);
+        vertical-align: middle;
+        padding: 1ch;
+    }
+}

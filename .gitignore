@@ -1,0 +1,6 @@
+node_modules
+*.bkp
+*.dtmp
+tdw.zip
+.awcache
+.vscode
