@@ -4,7 +4,12 @@ This project allows to create components, set their properties, assign them to a
 
 In a future release, systems may be added.
 
-## Install and run
+## Run the online version
+
+You can use the online version:
+https://adriencastex.github.io/ecs-conception-dev-tool/
+
+## Install and run offline
 
 Download the repository and open `index.html` in a web browser.
 
