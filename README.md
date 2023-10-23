@@ -34,6 +34,12 @@ In your config file, you will get typings thanks to `configs/jsdoc/jsdoc.js` and
 
 Here is a tip when designing the `convertToCode` method: generate code with documention (jsdoc for instance for js/ts code), because the conception includes a lot of relationships like "In which archetypes this component is used?", "Is it required?". This will allow the developer of your projet to have more context of use about the components and this will lead to less mistakes/bugs.
 
+## More information about the data
+
+When generating, the config's method `convertToCode(...)` must produce a JSON string in the content (provided as a parameter, this way it is standard). It must be placed in a comment to avoid conflicts with the generated code.
+
+When reading (load button), the script will find the JSON in the code and parse it to recreate the components and archetypes. The rest will be ignored.
+
 ## Recompilation
 
 Install dependencies:
