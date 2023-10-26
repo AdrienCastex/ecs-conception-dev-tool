@@ -11,18 +11,6 @@ export function ComponentsColumnView({ components, groups: compGroups, onGroupsC
 
     useEffect(() => {
         if(comps !== components) {
-            onComponentsChanged(comps);
-        }
-    }, [comps]);
-
-    useEffect(() => {
-        if(groups !== compGroups) {
-            onGroupsChanged(groups);
-        }
-    }, [groups]);
-
-    useEffect(() => {
-        if(comps !== components) {
             setComps(components);
         }
     }, [components]);
@@ -46,29 +34,43 @@ export function ComponentsColumnView({ components, groups: compGroups, onGroupsC
                 onComponentsChanged(newValue);
             }}>+</div>
             <div className="column-name">Components</div>
-            <div className="gbtn" onClick={() => setComps(comps.slice().sort((a, b) => a.name.localeCompare(b.name)))}>Sort</div>
+            <div className="gbtn" onClick={() => {
+                const newValue = comps.slice().sort((a, b) => a.name.localeCompare(b.name));
+                setComps(newValue);
+                onComponentsChanged(newValue);
+            }}>Sort</div>
             <div className="gbtn" onClick={() => {
                 const newValue = [
                     ...groups,
                     new ECS_Group()
                 ];
                 setGroups(newValue);
+                onGroupsChanged(newValue);
             }}>+ Group</div>
         </div>
         <div className="column-body">
             {[...groups, undefined].map((g, i) => <Group groups={groups} components={comps.filter(c => (c.groupId ?? '') === (g?.id ?? ''))} key={g?.id ?? '-'} group={g} onChanged={(newGroup) => {
                 if(g) {
-                    setGroups([
+                    const newValue = [
                         ...groups.slice(0, i),
                         newGroup,
                         ...groups.slice(i + 1),
-                    ].filter(Boolean));
+                    ].filter(Boolean);
+                    setGroups(newValue);
+                    onGroupsChanged(newValue);
                 }
             }} onComponentsChanged={(newComps) => {
-                setComps(comps.map(c => {
-                    const index = newComps.findIndex(nc => nc.id === c.id);
-                    return index >= 0 ? newComps[index] : c;
-                }).filter(Boolean));
+                const newValue = comps.map(c => {
+                    if(c.groupId == g?.id) {
+                        const index = newComps.findIndex(nc => nc.id === c.id);
+                        return index >= 0 ? newComps[index] : undefined;
+                    } else {
+                        return c;
+                    }
+                }).filter(Boolean);
+
+                setComps(newValue);
+                onComponentsChanged(newValue);
             }} />)}
         </div>
     </div>
@@ -81,7 +83,6 @@ function Group({ group, groups, components, onComponentsChanged, onChanged }: { 
         useEffect(() => {
             if(group && group.name !== name) {
                 group.name = name;
-                onChanged(group);
             }
         }, [name]);
     
@@ -93,7 +94,11 @@ function Group({ group, groups, components, onComponentsChanged, onChanged }: { 
     return <div className="group">
         <div className={`group-header ${group ? '' : 'default-group'}`}>
             {group ? <>
-                <Form.Control type="text" placeholder="Group name" value={name} onChange={(e) => setName(e.target.value)} />
+                <Form.Control type="text" placeholder="Group name" value={name} onChange={(e) => {
+                    const newValue = e.target.value;
+                    setName(newValue);
+                    onChanged(group);
+                }} />
                 <div className="gbtn-inv plus-btn" onClick={() => onChanged(undefined)}>⨯</div>
             </> : <>
                 Without group
@@ -127,6 +132,7 @@ function Component({ component, groups, onChanged }: { groups: ECS_Group[], comp
     useEffect(() => {
         if(component.properties !== properties) {
             component.properties = properties;
+            onChanged(component);
         }
     }, [properties]);
 

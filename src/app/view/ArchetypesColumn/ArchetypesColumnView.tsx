@@ -11,11 +11,10 @@ import { Config } from "../../Config";
 export function ArchetypesColumnView({ archetypes, components, componentsGroups, onArchetypesChanged }: { archetypes: ECS_Archetype[], componentsGroups: ECS_Group[], components: ECS_Component[], onArchetypesChanged: (archetypes: ECS_Archetype[]) => void }) {
     const [archs, setArchetypes] = useState(archetypes);
 
-    useEffect(() => {
-        if(archs !== archetypes) {
-            onArchetypesChanged(archs);
-        }
-    }, [archs]);
+    const changeArchetypes = (value: typeof archetypes) => {
+        setArchetypes(value);
+        onArchetypesChanged(value);
+    }
 
     useEffect(() => {
         setArchetypes(archetypes);
@@ -24,7 +23,7 @@ export function ArchetypesColumnView({ archetypes, components, componentsGroups,
     return <div className="archetypes-column main-column">
         <div className="column-header">
             <div className="gbtn" onClick={() => {
-                setArchetypes([
+                changeArchetypes([
                     ...archs,
                     ECS_Archetype.create({
                         name: ''
@@ -32,11 +31,11 @@ export function ArchetypesColumnView({ archetypes, components, componentsGroups,
                 ])
             }}>+</div>
             <div className="column-name">Archetypes</div>
-            <div className="gbtn" onClick={() => setArchetypes(archs.slice().sort((a, b) => a.name.localeCompare(b.name)))}>Sort</div>
+            <div className="gbtn" onClick={() => changeArchetypes(archs.slice().sort((a, b) => a.name.localeCompare(b.name)))}>Sort</div>
         </div>
         <div className="column-body">
             {archs.map((arch, i) => <Archetype key={arch.id} archetype={arch} componentsGroups={componentsGroups} components={components} onChanged={(newArch) => {
-                setArchetypes([
+                changeArchetypes([
                     ...archs.slice(0, i),
                     newArch,
                     ...archs.slice(i + 1),
